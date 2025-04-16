@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="GeometryService"
+             targetNamespace="http://example.com/geometry"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://example.com/geometry"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <types>
+    <xsd:schema targetNamespace="http://example.com/geometry">
+      <xsd:element name="calculateAreaRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="shape" type="xsd:string"/>
+            <xsd:element name="side" type="xsd:float" minOccurs="0"/>
+            <xsd:element name="length" type="xsd:float" minOccurs="0"/>
+            <xsd:element name="width" type="xsd:float" minOccurs="0"/>
+            <xsd:element name="radius" type="xsd:float" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="calculateAreaResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" type="xsd:float"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="calculateAreaRequestMessage">
+    <part name="parameters" element="tns:calculateAreaRequest"/>
+  </message>
+
+  <message name="calculateAreaResponseMessage">
+    <part name="parameters" element="tns:calculateAreaResponse"/>
+  </message>
+
+  <portType name="GeometryServiceSoapPort">
+    <operation name="calculateArea">
+      <input message="tns:calculateAreaRequestMessage"/>
+      <output message="tns:calculateAreaResponseMessage"/>
+    </operation>
+  </portType>
+
+  <binding name="GeometryServiceSoapBinding" type="tns:GeometryServiceSoapPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="calculateArea">
+      <soap:operation soapAction="http://example.com/geometry/calculateArea"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="GeometryService">
+    <port name="GeometryServiceSoapPort" binding="tns:GeometryServiceSoapBinding">
+      <soap:address location="http://localhost:8000/geometry"/>
+    </port>
+  </service>
+</definitions>
